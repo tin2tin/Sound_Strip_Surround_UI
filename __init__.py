@@ -2,10 +2,10 @@ bl_info = {
     "name": "Sound Strip Channel UI (Icon Toggle)",
     "author": "tintwotin",
     "version": (1, 1),
-    "blender": (3, 40, 0), 
+    "blender": (3, 40, 0), # Adjusted for Blender 3.4+ for consistency
     "location": "Sequencer > Sidebar > Sound",
     "description": "Expose channel settings with icon toggling buttons",
-    "warning": "",
+    "warning": "Requires corresponding _outline.png icon files in an 'icons' subfolder.",
     "doc_url": "",
     "category": "Sequencer",
 }
@@ -43,15 +43,15 @@ class SequencerPanPresets(Operator):
             'FRONTLEFT': -0.33335,
             'FRONTCENTER': 0.0,
             'FRONTRIGHT': 0.33335,
-            'SIDELEFT': -1.22225, # Original was -1.2225, adjusted slightly for consistency with 7.1 side.
-            'SIDERIGHT': 1.22225, # Original was 1.2225
+            'SIDELEFT': -1.2225,
+            'SIDERIGHT': 1.2225,
         },
         'SURROUND71': {
             'FRONTLEFT': -0.33335,
             'FRONTCENTER': 0.0,
             'FRONTRIGHT': 0.33335,
-            'SIDELEFT': -1.22225, # Original was -1.2225
-            'SIDERIGHT': 1.22225, # Original was 1.2225
+            'SIDELEFT': -1.2225,
+            'SIDERIGHT': 1.2225,
             'REARLEFT': -1.66667,
             'REARRIGHT': 1.66667,
         }
@@ -108,7 +108,7 @@ class SequencerPanPresets(Operator):
             preset_key = self.surround4
             pan_dict_for_mode = self.pan_values_dict['SURROUND4']
         elif audio_channels_enum == 'SURROUND51':
-            preset_key = self.surround51
+            preset_key = self.surround51 # This will be one of 'FRONTLEFT', 'FRONTCENTER', etc.
             pan_dict_for_mode = self.pan_values_dict['SURROUND51']
         elif audio_channels_enum == 'SURROUND71':
             preset_key = self.surround71
@@ -182,7 +182,7 @@ class SEQUENCER_PT_adjust_sound(Panel):
         strip = context.active_sequence_strip
         scene = context.scene
 
-        if not strip or strip.type != 'SOUND':
+        if not strip or strip.type != 'SOUND': # Should be caught by poll, but good practice
             layout.label(text="Select a Sound Strip")
             return
 
@@ -195,7 +195,7 @@ class SEQUENCER_PT_adjust_sound(Panel):
         audio_channels_str_lower = audio_channels_enum.lower() 
         
         st = context.space_data # Sequencer space data
-        overlay_settings = st.overlay if hasattr(st, 'overlay') else None
+        overlay_settings = st.overlay if hasattr(st, 'overlay') else None # More robust way to get overlay
 
         main_col = layout.column()
         main_col.active = not strip.mute 
